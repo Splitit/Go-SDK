@@ -15,3 +15,18 @@
 | `CLEARED` |
 | `CANCELED` |
 
+## Example
+
+```go
+package main
+
+import (
+    "splititwebapiv4/models"
+)
+
+func main() {
+    planStatus := models.PlanStatusEnum_CLEARED
+
+}
+```
+

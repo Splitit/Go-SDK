@@ -9,17 +9,22 @@
 
 | Name | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `AttemptThreeDSecured` | `*bool` | Optional | - |
 | `SoftDescriptor` | `*string` | Optional | - |
-| `ThreeDSData` | [`*models.ThreeDSData`](../../doc/models/three-ds-data.md) | Optional | - |
 
-## Example (as JSON)
+## Example
 
-```json
-{
-  "AttemptThreeDSecured": false,
-  "SoftDescriptor": "SoftDescriptor6",
-  "ThreeDSData": null
+```go
+package main
+
+import (
+    "splititwebapiv4/models"
+)
+
+func main() {
+    processingData := models.ProcessingData{
+        SoftDescriptor:       models.ToPointer("SoftDescriptor2"),
+    }
+
 }
 ```
 

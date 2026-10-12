@@ -18,16 +18,25 @@ OAuth 2 Authorization endpoint response
 | `Expiry` | `*int64` | Optional | Time of token expiry as unix timestamp (UTC) |
 | `RefreshToken` | `*string` | Optional | Refresh token<br>Used to get a new access token when it expires. |
 
-## Example (as JSON)
+## Example
 
-```json
-{
-  "access_token": "access_token4",
-  "token_type": "token_type6",
-  "expires_in": 74,
-  "scope": "scope6",
-  "expiry": 88,
-  "refresh_token": "refresh_token6"
+```go
+package main
+
+import (
+    "splititwebapiv4/models"
+)
+
+func main() {
+    oAuthToken := models.OAuthToken{
+        AccessToken:  "access_token2",
+        TokenType:    "token_type2",
+        ExpiresIn:    models.ToPointer(int64(84)),
+        Scope:        models.ToPointer("scope8"),
+        Expiry:       models.ToPointer(int64(78)),
+        RefreshToken: models.ToPointer("refresh_token4"),
+    }
+
 }
 ```
 

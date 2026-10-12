@@ -1,4 +1,4 @@
-module splititwebapiv3
+module splititwebapiv4
 
 go 1.18
 
