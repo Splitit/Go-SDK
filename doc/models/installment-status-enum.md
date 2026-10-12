@@ -9,7 +9,27 @@
 
 | Name |
 |  --- |
-| `PENDING` |
-| `PROCESSED` |
+| `NONE` |
+| `WAITINGFORPROCESSDATE` |
+| `FINISHED` |
+| `DELETED` |
+| `STOPPED` |
 | `CANCELED` |
+| `AWAITINGCAPTURE` |
+| `AWAITINGVOID` |
+
+## Example
+
+```go
+package main
+
+import (
+    "splititwebapiv4/models"
+)
+
+func main() {
+    installmentStatus := models.InstallmentStatusEnum_AWAITINGCAPTURE
+
+}
+```
 

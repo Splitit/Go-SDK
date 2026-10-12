@@ -18,3 +18,18 @@ OAuth 2 Authorization error codes
 | `UNSUPPORTEDGRANTTYPE` | The authorization grant type is not supported by the authorization server. |
 | `INVALIDSCOPE` | The requested scope is invalid, unknown, malformed, or exceeds the scope granted by the resource owner. |
 
+## Example
+
+```go
+package main
+
+import (
+    "splititwebapiv4/models"
+)
+
+func main() {
+    oAuthProviderError := models.OAuthProviderErrorEnum_INVALIDREQUEST
+
+}
+```
+

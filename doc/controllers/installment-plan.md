@@ -10,49 +10,284 @@ installmentPlanController := client.InstallmentPlanController()
 
 ## Methods
 
-* [Installment Plan Get](../../doc/controllers/installment-plan.md#installment-plan-get)
-* [Installment Plan Search](../../doc/controllers/installment-plan.md#installment-plan-search)
-* [Installment Plan Post](../../doc/controllers/installment-plan.md#installment-plan-post)
-* [Installment Plan Post 2](../../doc/controllers/installment-plan.md#installment-plan-post-2)
-* [Installment Plan Verify Authorization](../../doc/controllers/installment-plan.md#installment-plan-verify-authorization)
+* [Installment Plan Check Card Validity](../../doc/controllers/installment-plan.md#installment-plan-check-card-validity)
+* [Installment Plan Create Offers](../../doc/controllers/installment-plan.md#installment-plan-create-offers)
+* [Installment Plan Generate Payment Link](../../doc/controllers/installment-plan.md#installment-plan-generate-payment-link)
+* [Installment Plan Update Offers](../../doc/controllers/installment-plan.md#installment-plan-update-offers)
+* [Installment Plan Authorize](../../doc/controllers/installment-plan.md#installment-plan-authorize)
 * [Installment Plan Update Order](../../doc/controllers/installment-plan.md#installment-plan-update-order)
-* [Installment Plan Update Order 2](../../doc/controllers/installment-plan.md#installment-plan-update-order-2)
+* [Installment Plan Get by Installment Plan Number](../../doc/controllers/installment-plan.md#installment-plan-get-by-installment-plan-number)
+* [Installment Plan Search](../../doc/controllers/installment-plan.md#installment-plan-search)
 * [Installment Plan Refund](../../doc/controllers/installment-plan.md#installment-plan-refund)
-* [Installment Plan Check Eligibility](../../doc/controllers/installment-plan.md#installment-plan-check-eligibility)
-* [Installment Plan Get Eligibility Terms and Condition](../../doc/controllers/installment-plan.md#installment-plan-get-eligibility-terms-and-condition)
 
 
-# Installment Plan Get
+# Installment Plan Check Card Validity
 
 ```go
-InstallmentPlanGet(
+InstallmentPlanCheckCardValidity(
     ctx context.Context,
-    installmentPlanNumber string,
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.InstallmentPlanGetResponse],
+    body models.CardValidityRequest,
+    xSplititTouchPoint *string,
+    xSplititIdempotencyKey *string,
+    xSplititTouchPointHeader *string,
+    xSplititRequestID *string) (
+    models.ApiResponse[models.CardValidityResponse],
     error)
 ```
+
+## Authentication
+
+This endpoint requires [OAuth2](../../doc/auth/oauth-2-client-credentials-grant.md) **AND** [ApiKey](../../doc/auth/custom-header-signature.md)
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`models.CardValidityRequest`](../../doc/models/card-validity-request.md) | Body, Required | - |
+| `xSplititTouchPoint` | `*string` | Header, Optional | - |
+| `xSplititIdempotencyKey` | `*string` | Header, Optional | - |
+| `xSplititTouchPointHeader` | `*string` | Header, Optional | Touch point string |
+| `xSplititRequestID` | `*string` | Header, Optional | - |
+
+## Requires scope
+
+### OAuth2
+
+`api.v4`
+
+## Response Type
+
+**200**: Success
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.CardValidityResponse](../../doc/models/card-validity-response.md).
+
+## Example Usage
+
+```go
+ctx := context.Background()
+
+body := models.CardValidityRequest{
+}
+
+apiResponse, err := installmentPlanController.InstallmentPlanCheckCardValidity(ctx, body, nil, nil, nil, nil)
+if err != nil {
+    switch typedErr := err.(type) {
+        case *errors.ApiErrorResponse:
+            log.Fatalln("ApiErrorResponseException: ", typedErr)
+        default:
+            log.Fatalln(err)
+    }
+} else {
+    // Printing the result and response
+    fmt.Println(apiResponse.Data)
+    fmt.Println(apiResponse.Response.StatusCode)
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error | [`ApiErrorResponseException`](../../doc/models/api-error-response-exception.md) |
+
+
+# Installment Plan Create Offers
+
+```go
+InstallmentPlanCreateOffers(
+    ctx context.Context,
+    body models.OffersRequest,
+    xSplititTouchPoint *string,
+    xSplititIdempotencyKey *string,
+    xSplititRequestID *string) (
+    models.ApiResponse[models.OffersResponse],
+    error)
+```
+
+## Authentication
+
+This endpoint requires [OAuth2](../../doc/auth/oauth-2-client-credentials-grant.md) **AND** [ApiKey](../../doc/auth/custom-header-signature.md)
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`models.OffersRequest`](../../doc/models/offers-request.md) | Body, Required | - |
+| `xSplititTouchPoint` | `*string` | Header, Optional | Touch Point |
+| `xSplititIdempotencyKey` | `*string` | Header, Optional | - |
+| `xSplititRequestID` | `*string` | Header, Optional | - |
+
+## Requires scope
+
+### OAuth2
+
+`api.v4`
+
+## Response Type
+
+**200**: Success
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.OffersResponse](../../doc/models/offers-response.md).
+
+## Example Usage
+
+```go
+ctx := context.Background()
+
+body := models.OffersRequest{
+    PurchaseMethod:         models.PurchaseMethodEnum_INSTORE,
+    PurchaseAmount:         "PurchaseAmount2",
+    Currency:               "Currency4",
+    ShopperDetails:         models.OffersShopperDetails{
+        LastName:             "LastName6",
+        Email:                "Email6",
+    },
+    PaymentMethod:          models.OffersPaymentMethod{
+        Type:                 "Card",
+        CardDetails:          models.OffersCardDetails{
+            CardNumber:           "CardNumber2",
+            ExpMonth:             90,
+            ExpYear:              228,
+        },
+    },
+}
+
+apiResponse, err := installmentPlanController.InstallmentPlanCreateOffers(ctx, body, nil, nil, nil)
+if err != nil {
+    switch typedErr := err.(type) {
+        case *errors.ApiErrorResponse:
+            log.Fatalln("ApiErrorResponseException: ", typedErr)
+        default:
+            log.Fatalln(err)
+    }
+} else {
+    // Printing the result and response
+    fmt.Println(apiResponse.Data)
+    fmt.Println(apiResponse.Response.StatusCode)
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error | [`ApiErrorResponseException`](../../doc/models/api-error-response-exception.md) |
+
+
+# Installment Plan Generate Payment Link
+
+```go
+InstallmentPlanGeneratePaymentLink(
+    ctx context.Context,
+    body models.PaymentLinkRequest,
+    xSplititTouchPoint *string,
+    xSplititIdempotencyKey *string,
+    xSplititRequestID *string) (
+    models.ApiResponse[models.PaymentLinkResponse],
+    error)
+```
+
+## Authentication
+
+This endpoint requires [OAuth2](../../doc/auth/oauth-2-client-credentials-grant.md) **AND** [ApiKey](../../doc/auth/custom-header-signature.md)
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`models.PaymentLinkRequest`](../../doc/models/payment-link-request.md) | Body, Required | - |
+| `xSplititTouchPoint` | `*string` | Header, Optional | Touch point and  version |
+| `xSplititIdempotencyKey` | `*string` | Header, Optional | - |
+| `xSplititRequestID` | `*string` | Header, Optional | - |
+
+## Requires scope
+
+### OAuth2
+
+`api.v4`
+
+## Response Type
+
+**200**: Success
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.PaymentLinkResponse](../../doc/models/payment-link-response.md).
+
+## Example Usage
+
+```go
+ctx := context.Background()
+
+body := models.PaymentLinkRequest{
+    Amount:                 "Amount8",
+    Currency:               "Currency4",
+    PurchaseMethod:         models.PurchaseMethodEnum_INSTORE,
+    ShopperDetails:         models.OffersShopperDetails{
+        LastName:             "LastName6",
+        Email:                "Email6",
+    },
+}
+
+apiResponse, err := installmentPlanController.InstallmentPlanGeneratePaymentLink(ctx, body, nil, nil, nil)
+if err != nil {
+    switch typedErr := err.(type) {
+        case *errors.ApiErrorResponse:
+            log.Fatalln("ApiErrorResponseException: ", typedErr)
+        default:
+            log.Fatalln(err)
+    }
+} else {
+    // Printing the result and response
+    fmt.Println(apiResponse.Data)
+    fmt.Println(apiResponse.Response.StatusCode)
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error | [`ApiErrorResponseException`](../../doc/models/api-error-response-exception.md) |
+
+
+# Installment Plan Update Offers
+
+```go
+InstallmentPlanUpdateOffers(
+    ctx context.Context,
+    installmentPlanNumber string,
+    body models.UpdateOffersRequest,
+    xSplititTouchPoint *string,
+    xSplititIdempotencyKey *string,
+    xSplititRequestID *string) (
+    models.ApiResponse[models.OffersResponse],
+    error)
+```
+
+## Authentication
+
+This endpoint requires [OAuth2](../../doc/auth/oauth-2-client-credentials-grant.md) **AND** [ApiKey](../../doc/auth/custom-header-signature.md)
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
 | `installmentPlanNumber` | `string` | Template, Required | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
+| `body` | [`models.UpdateOffersRequest`](../../doc/models/update-offers-request.md) | Body, Required | - |
+| `xSplititTouchPoint` | `*string` | Header, Optional | Touch point and version |
+| `xSplititIdempotencyKey` | `*string` | Header, Optional | - |
+| `xSplititRequestID` | `*string` | Header, Optional | - |
 
 ## Requires scope
 
-### OAuth2-sandbox
+### OAuth2
 
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
+`api.v4`
 
 ## Response Type
 
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InstallmentPlanGetResponse](../../doc/models/installment-plan-get-response.md).
+**200**: Success
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.OffersResponse](../../doc/models/offers-response.md).
 
 ## Example Usage
 
@@ -61,9 +296,17 @@ ctx := context.Background()
 
 installmentPlanNumber := "installmentPlanNumber6"
 
-apiResponse, err := installmentPlanController.InstallmentPlanGet(ctx, installmentPlanNumber, models.EmptyOptional[string]())
+body := models.UpdateOffersRequest{
+}
+
+apiResponse, err := installmentPlanController.InstallmentPlanUpdateOffers(ctx, installmentPlanNumber, body, nil, nil, nil)
 if err != nil {
-    log.Fatalln(err)
+    switch typedErr := err.(type) {
+        case *errors.ApiErrorResponse:
+            log.Fatalln("ApiErrorResponseException: ", typedErr)
+        default:
+            log.Fatalln(err)
+    }
 } else {
     // Printing the result and response
     fmt.Println(apiResponse.Data)
@@ -75,240 +318,48 @@ if err != nil {
 
 | HTTP Status Code | Error Description | Exception Class |
 |  --- | --- | --- |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
+| Default | Error | [`ApiErrorResponseException`](../../doc/models/api-error-response-exception.md) |
 
 
-# Installment Plan Search
+# Installment Plan Authorize
 
 ```go
-InstallmentPlanSearch(
-    ctx context.Context,
-    installmentPlanNumber models.Optional[string],
-    refOrderNumber models.Optional[string],
-    extendedParams models.Optional[interface{}],
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.InstallmentPlanSearchResponse],
-    error)
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `installmentPlanNumber` | `models.Optional[string]` | Query, Optional | - |
-| `refOrderNumber` | `models.Optional[string]` | Query, Optional | - |
-| `extendedParams` | `models.Optional[interface{}]` | Query, Optional | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
-
-## Requires scope
-
-### OAuth2-sandbox
-
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
-
-## Response Type
-
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InstallmentPlanSearchResponse](../../doc/models/installment-plan-search-response.md).
-
-## Example Usage
-
-```go
-ctx := context.Background()
-
-apiResponse, err := installmentPlanController.InstallmentPlanSearch(ctx, models.EmptyOptional[string](), models.EmptyOptional[string](), models.EmptyOptional[interface{}](), models.EmptyOptional[string]())
-if err != nil {
-    log.Fatalln(err)
-} else {
-    // Printing the result and response
-    fmt.Println(apiResponse.Data)
-    fmt.Println(apiResponse.Response.StatusCode)
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-
-
-# Installment Plan Post
-
-```go
-InstallmentPlanPost(
-    ctx context.Context,
-    xSplititIdempotencyKey string,
-    body models.InstallmentPlanInitiateRequest,
-    xSplititTestMode models.Optional[models.TestModesEnum],
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.InitiatePlanResponse],
-    error)
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `xSplititIdempotencyKey` | `string` | Header, Required | - |
-| `body` | [`models.InstallmentPlanInitiateRequest`](../../doc/models/installment-plan-initiate-request.md) | Body, Required | - |
-| `xSplititTestMode` | [`models.Optional[models.TestModesEnum]`](../../doc/models/test-modes-enum.md) | Header, Optional | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
-
-## Requires scope
-
-### OAuth2-sandbox
-
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
-
-## Response Type
-
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InitiatePlanResponse](../../doc/models/initiate-plan-response.md).
-
-## Example Usage
-
-```go
-ctx := context.Background()
-
-xSplititIdempotencyKey := "X-Splitit-IdempotencyKey2"
-
-body := models.InstallmentPlanInitiateRequest{
-}
-
-apiResponse, err := installmentPlanController.InstallmentPlanPost(ctx, xSplititIdempotencyKey, body, models.EmptyOptional[models.TestModesEnum](), models.EmptyOptional[string]())
-if err != nil {
-    log.Fatalln(err)
-} else {
-    // Printing the result and response
-    fmt.Println(apiResponse.Data)
-    fmt.Println(apiResponse.Response.StatusCode)
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | - | [`PlanErrorResponseException`](../../doc/models/plan-error-response-exception.md) |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-
-
-# Installment Plan Post 2
-
-```go
-InstallmentPlanPost2(
-    ctx context.Context,
-    xSplititIdempotencyKey string,
-    body models.InstallmentPlanCreateRequest,
-    xSplititTestMode models.Optional[models.TestModesEnum],
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.InstallmentPlanCreateResponse],
-    error)
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `xSplititIdempotencyKey` | `string` | Header, Required | - |
-| `body` | [`models.InstallmentPlanCreateRequest`](../../doc/models/installment-plan-create-request.md) | Body, Required | - |
-| `xSplititTestMode` | [`models.Optional[models.TestModesEnum]`](../../doc/models/test-modes-enum.md) | Header, Optional | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
-
-## Requires scope
-
-### OAuth2-sandbox
-
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
-
-## Response Type
-
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InstallmentPlanCreateResponse](../../doc/models/installment-plan-create-response.md).
-
-## Example Usage
-
-```go
-ctx := context.Background()
-
-xSplititIdempotencyKey := "X-Splitit-IdempotencyKey2"
-
-body := models.InstallmentPlanCreateRequest{
-    AutoCapture:                false,
-    TermsAndConditionsAccepted: false,
-}
-
-apiResponse, err := installmentPlanController.InstallmentPlanPost2(ctx, xSplititIdempotencyKey, body, models.EmptyOptional[models.TestModesEnum](), models.EmptyOptional[string]())
-if err != nil {
-    log.Fatalln(err)
-} else {
-    // Printing the result and response
-    fmt.Println(apiResponse.Data)
-    fmt.Println(apiResponse.Response.StatusCode)
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | - | [`PlanErrorResponseException`](../../doc/models/plan-error-response-exception.md) |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-
-
-# Installment Plan Verify Authorization
-
-```go
-InstallmentPlanVerifyAuthorization(
+InstallmentPlanAuthorize(
     ctx context.Context,
     installmentPlanNumber string,
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.VerifyAuthorizationResponse],
+    body models.AuthorizeRequest,
+    xSplititTouchPoint *string,
+    xSplititIdempotencyKey *string,
+    xSplititRequestID *string) (
+    models.ApiResponse[models.AuthorizeResponse],
     error)
 ```
+
+## Authentication
+
+This endpoint requires [OAuth2](../../doc/auth/oauth-2-client-credentials-grant.md) **AND** [ApiKey](../../doc/auth/custom-header-signature.md)
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
 | `installmentPlanNumber` | `string` | Template, Required | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
+| `body` | [`models.AuthorizeRequest`](../../doc/models/authorize-request.md) | Body, Required | - |
+| `xSplititTouchPoint` | `*string` | Header, Optional | Touch point and version |
+| `xSplititIdempotencyKey` | `*string` | Header, Optional | - |
+| `xSplititRequestID` | `*string` | Header, Optional | - |
 
 ## Requires scope
 
-### OAuth2-sandbox
+### OAuth2
 
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
+`api.v4`
 
 ## Response Type
 
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.VerifyAuthorizationResponse](../../doc/models/verify-authorization-response.md).
+**200**: Success
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.AuthorizeResponse](../../doc/models/authorize-response.md).
 
 ## Example Usage
 
@@ -317,9 +368,20 @@ ctx := context.Background()
 
 installmentPlanNumber := "installmentPlanNumber6"
 
-apiResponse, err := installmentPlanController.InstallmentPlanVerifyAuthorization(ctx, installmentPlanNumber, models.EmptyOptional[string]())
+body := models.AuthorizeRequest{
+    OfferId:                "OfferId8",
+    AutoCapture:            false,
+    ShopperAcceptedTerms:   false,
+}
+
+apiResponse, err := installmentPlanController.InstallmentPlanAuthorize(ctx, installmentPlanNumber, body, nil, nil, nil)
 if err != nil {
-    log.Fatalln(err)
+    switch typedErr := err.(type) {
+        case *errors.ApiErrorResponse:
+            log.Fatalln("ApiErrorResponseException: ", typedErr)
+        default:
+            log.Fatalln(err)
+    }
 } else {
     // Printing the result and response
     fmt.Println(apiResponse.Data)
@@ -331,10 +393,7 @@ if err != nil {
 
 | HTTP Status Code | Error Description | Exception Class |
 |  --- | --- | --- |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
+| Default | Error | [`ApiErrorResponseException`](../../doc/models/api-error-response-exception.md) |
 
 
 # Installment Plan Update Order
@@ -343,35 +402,39 @@ if err != nil {
 InstallmentPlanUpdateOrder(
     ctx context.Context,
     installmentPlanNumber string,
-    xSplititIdempotencyKey string,
-    body models.InstallmentPlanUpdateRequest,
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.InstallmentPlanUpdateResponse],
+    body models.UpdateOrderRequest,
+    xSplititTouchPoint *string,
+    xSplititIdempotencyKey *string,
+    xSplititRequestID *string) (
+    models.ApiResponse[models.UpdateOrderResponse],
     error)
 ```
+
+## Authentication
+
+This endpoint requires [OAuth2](../../doc/auth/oauth-2-client-credentials-grant.md) **AND** [ApiKey](../../doc/auth/custom-header-signature.md)
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
 | `installmentPlanNumber` | `string` | Template, Required | - |
-| `xSplititIdempotencyKey` | `string` | Header, Required | - |
-| `body` | [`models.InstallmentPlanUpdateRequest`](../../doc/models/installment-plan-update-request.md) | Body, Required | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
+| `body` | [`models.UpdateOrderRequest`](../../doc/models/update-order-request.md) | Body, Required | - |
+| `xSplititTouchPoint` | `*string` | Header, Optional | Touch point and version |
+| `xSplititIdempotencyKey` | `*string` | Header, Optional | - |
+| `xSplititRequestID` | `*string` | Header, Optional | - |
 
 ## Requires scope
 
-### OAuth2-sandbox
+### OAuth2
 
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
+`api.v4`
 
 ## Response Type
 
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InstallmentPlanUpdateResponse](../../doc/models/installment-plan-update-response.md).
+**200**: Success
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.UpdateOrderResponse](../../doc/models/update-order-response.md).
 
 ## Example Usage
 
@@ -380,14 +443,18 @@ ctx := context.Background()
 
 installmentPlanNumber := "installmentPlanNumber6"
 
-xSplititIdempotencyKey := "X-Splitit-IdempotencyKey2"
-
-body := models.InstallmentPlanUpdateRequest{
+body := models.UpdateOrderRequest{
+    ShippingStatus:         models.ShippingStatusEnum_DELIVERED,
 }
 
-apiResponse, err := installmentPlanController.InstallmentPlanUpdateOrder(ctx, installmentPlanNumber, xSplititIdempotencyKey, body, models.EmptyOptional[string]())
+apiResponse, err := installmentPlanController.InstallmentPlanUpdateOrder(ctx, installmentPlanNumber, body, nil, nil, nil)
 if err != nil {
-    log.Fatalln(err)
+    switch typedErr := err.(type) {
+        case *errors.ApiErrorResponse:
+            log.Fatalln("ApiErrorResponseException: ", typedErr)
+        default:
+            log.Fatalln(err)
+    }
 } else {
     // Printing the result and response
     fmt.Println(apiResponse.Data)
@@ -399,59 +466,62 @@ if err != nil {
 
 | HTTP Status Code | Error Description | Exception Class |
 |  --- | --- | --- |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
+| Default | Error | [`ApiErrorResponseException`](../../doc/models/api-error-response-exception.md) |
 
 
-# Installment Plan Update Order 2
+# Installment Plan Get by Installment Plan Number
 
 ```go
-InstallmentPlanUpdateOrder2(
+InstallmentPlanGetByInstallmentPlanNumber(
     ctx context.Context,
-    xSplititIdempotencyKey string,
-    body models.InstallmentPlanUpdateRequestByIdentifier,
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.InstallmentPlanUpdateResponse],
+    installmentPlanNumber string,
+    xSplititTouchPoint *string,
+    xSplititIdempotencyKey *string,
+    xSplititRequestID *string) (
+    models.ApiResponse[models.InstallmentPlanDetailsResponse],
     error)
 ```
+
+## Authentication
+
+This endpoint requires [OAuth2](../../doc/auth/oauth-2-client-credentials-grant.md) **AND** [ApiKey](../../doc/auth/custom-header-signature.md)
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `xSplititIdempotencyKey` | `string` | Header, Required | - |
-| `body` | [`models.InstallmentPlanUpdateRequestByIdentifier`](../../doc/models/installment-plan-update-request-by-identifier.md) | Body, Required | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
+| `installmentPlanNumber` | `string` | Template, Required | - |
+| `xSplititTouchPoint` | `*string` | Header, Optional | Touch point and version |
+| `xSplititIdempotencyKey` | `*string` | Header, Optional | - |
+| `xSplititRequestID` | `*string` | Header, Optional | - |
 
 ## Requires scope
 
-### OAuth2-sandbox
+### OAuth2
 
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
+`api.v4`
 
 ## Response Type
 
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InstallmentPlanUpdateResponse](../../doc/models/installment-plan-update-response.md).
+**200**: Success
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InstallmentPlanDetailsResponse](../../doc/models/installment-plan-details-response.md).
 
 ## Example Usage
 
 ```go
 ctx := context.Background()
 
-xSplititIdempotencyKey := "X-Splitit-IdempotencyKey2"
+installmentPlanNumber := "installmentPlanNumber6"
 
-body := models.InstallmentPlanUpdateRequestByIdentifier{
-}
-
-apiResponse, err := installmentPlanController.InstallmentPlanUpdateOrder2(ctx, xSplititIdempotencyKey, body, models.EmptyOptional[string]())
+apiResponse, err := installmentPlanController.InstallmentPlanGetByInstallmentPlanNumber(ctx, installmentPlanNumber, nil, nil, nil)
 if err != nil {
-    log.Fatalln(err)
+    switch typedErr := err.(type) {
+        case *errors.ApiErrorResponse:
+            log.Fatalln("ApiErrorResponseException: ", typedErr)
+        default:
+            log.Fatalln(err)
+    }
 } else {
     // Printing the result and response
     fmt.Println(apiResponse.Data)
@@ -463,10 +533,75 @@ if err != nil {
 
 | HTTP Status Code | Error Description | Exception Class |
 |  --- | --- | --- |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
+| Default | Error | [`ApiErrorResponseException`](../../doc/models/api-error-response-exception.md) |
+
+
+# Installment Plan Search
+
+```go
+InstallmentPlanSearch(
+    ctx context.Context,
+    body models.InstallmentPlanSearchRequest,
+    xSplititTouchPoint *string,
+    xSplititIdempotencyKey *string,
+    xSplititRequestID *string) (
+    models.ApiResponse[models.InstallmentPlanSearchDetailsResponse],
+    error)
+```
+
+## Authentication
+
+This endpoint requires [OAuth2](../../doc/auth/oauth-2-client-credentials-grant.md) **AND** [ApiKey](../../doc/auth/custom-header-signature.md)
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`models.InstallmentPlanSearchRequest`](../../doc/models/installment-plan-search-request.md) | Body, Required | - |
+| `xSplititTouchPoint` | `*string` | Header, Optional | Touch point and version |
+| `xSplititIdempotencyKey` | `*string` | Header, Optional | - |
+| `xSplititRequestID` | `*string` | Header, Optional | - |
+
+## Requires scope
+
+### OAuth2
+
+`api.v4`
+
+## Response Type
+
+**200**: Success
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InstallmentPlanSearchDetailsResponse](../../doc/models/installment-plan-search-details-response.md).
+
+## Example Usage
+
+```go
+ctx := context.Background()
+
+body := models.InstallmentPlanSearchRequest{
+}
+
+apiResponse, err := installmentPlanController.InstallmentPlanSearch(ctx, body, nil, nil, nil)
+if err != nil {
+    switch typedErr := err.(type) {
+        case *errors.ApiErrorResponse:
+            log.Fatalln("ApiErrorResponseException: ", typedErr)
+        default:
+            log.Fatalln(err)
+    }
+} else {
+    // Printing the result and response
+    fmt.Println(apiResponse.Data)
+    fmt.Println(apiResponse.Response.StatusCode)
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error | [`ApiErrorResponseException`](../../doc/models/api-error-response-exception.md) |
 
 
 # Installment Plan Refund
@@ -475,35 +610,39 @@ if err != nil {
 InstallmentPlanRefund(
     ctx context.Context,
     installmentPlanNumber string,
-    xSplititIdempotencyKey string,
-    body models.InstallmentPlanRefundRequest,
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.InstallmentPlanRefundResponse],
+    body models.RefundRequest,
+    xSplititTouchPoint *string,
+    xSplititIdempotencyKey *string,
+    xSplititRequestID *string) (
+    models.ApiResponse[models.RefundResponse],
     error)
 ```
+
+## Authentication
+
+This endpoint requires [OAuth2](../../doc/auth/oauth-2-client-credentials-grant.md) **AND** [ApiKey](../../doc/auth/custom-header-signature.md)
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
 | `installmentPlanNumber` | `string` | Template, Required | - |
-| `xSplititIdempotencyKey` | `string` | Header, Required | - |
-| `body` | [`models.InstallmentPlanRefundRequest`](../../doc/models/installment-plan-refund-request.md) | Body, Required | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
+| `body` | [`models.RefundRequest`](../../doc/models/refund-request.md) | Body, Required | - |
+| `xSplititTouchPoint` | `*string` | Header, Optional | Touch point and version |
+| `xSplititIdempotencyKey` | `*string` | Header, Optional | - |
+| `xSplititRequestID` | `*string` | Header, Optional | - |
 
 ## Requires scope
 
-### OAuth2-sandbox
+### OAuth2
 
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
+`api.v4`
 
 ## Response Type
 
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InstallmentPlanRefundResponse](../../doc/models/installment-plan-refund-response.md).
+**200**: Success
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.RefundResponse](../../doc/models/refund-response.md).
 
 ## Example Usage
 
@@ -512,15 +651,18 @@ ctx := context.Background()
 
 installmentPlanNumber := "installmentPlanNumber6"
 
-xSplititIdempotencyKey := "X-Splitit-IdempotencyKey2"
-
-body := models.InstallmentPlanRefundRequest{
+body := models.RefundRequest{
     Amount:               "Amount8",
 }
 
-apiResponse, err := installmentPlanController.InstallmentPlanRefund(ctx, installmentPlanNumber, xSplititIdempotencyKey, body, models.EmptyOptional[string]())
+apiResponse, err := installmentPlanController.InstallmentPlanRefund(ctx, installmentPlanNumber, body, nil, nil, nil)
 if err != nil {
-    log.Fatalln(err)
+    switch typedErr := err.(type) {
+        case *errors.ApiErrorResponse:
+            log.Fatalln("ApiErrorResponseException: ", typedErr)
+        default:
+            log.Fatalln(err)
+    }
 } else {
     // Printing the result and response
     fmt.Println(apiResponse.Data)
@@ -532,131 +674,5 @@ if err != nil {
 
 | HTTP Status Code | Error Description | Exception Class |
 |  --- | --- | --- |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-
-
-# Installment Plan Check Eligibility
-
-```go
-InstallmentPlanCheckEligibility(
-    ctx context.Context,
-    xSplititIdempotencyKey string,
-    body models.CheckInstallmentsEligibilityRequest,
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.InstallmentsEligibilityResponse],
-    error)
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `xSplititIdempotencyKey` | `string` | Header, Required | - |
-| `body` | [`models.CheckInstallmentsEligibilityRequest`](../../doc/models/check-installments-eligibility-request.md) | Body, Required | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
-
-## Requires scope
-
-### OAuth2-sandbox
-
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
-
-## Response Type
-
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.InstallmentsEligibilityResponse](../../doc/models/installments-eligibility-response.md).
-
-## Example Usage
-
-```go
-ctx := context.Background()
-
-xSplititIdempotencyKey := "X-Splitit-IdempotencyKey2"
-
-body := models.CheckInstallmentsEligibilityRequest{
-}
-
-apiResponse, err := installmentPlanController.InstallmentPlanCheckEligibility(ctx, xSplititIdempotencyKey, body, models.EmptyOptional[string]())
-if err != nil {
-    log.Fatalln(err)
-} else {
-    // Printing the result and response
-    fmt.Println(apiResponse.Data)
-    fmt.Println(apiResponse.Response.StatusCode)
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-
-
-# Installment Plan Get Eligibility Terms and Condition
-
-```go
-InstallmentPlanGetEligibilityTermsAndCondition(
-    ctx context.Context,
-    ipn string,
-    xSplititTouchPoint models.Optional[string]) (
-    models.ApiResponse[models.EligibilityTermsAndConditionResponse],
-    error)
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `ipn` | `string` | Template, Required | - |
-| `xSplititTouchPoint` | `models.Optional[string]` | Header, Optional | TouchPoint |
-
-## Requires scope
-
-### OAuth2-sandbox
-
-`api.v3`
-
-### OAuth2-production
-
-`api.v3`
-
-## Response Type
-
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [models.EligibilityTermsAndConditionResponse](../../doc/models/eligibility-terms-and-condition-response.md).
-
-## Example Usage
-
-```go
-ctx := context.Background()
-
-ipn := "ipn4"
-
-apiResponse, err := installmentPlanController.InstallmentPlanGetEligibilityTermsAndCondition(ctx, ipn, models.EmptyOptional[string]())
-if err != nil {
-    log.Fatalln(err)
-} else {
-    // Printing the result and response
-    fmt.Println(apiResponse.Data)
-    fmt.Println(apiResponse.Response.StatusCode)
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 401 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 403 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 404 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
-| 500 | - | [`FailedResponseException`](../../doc/models/failed-response-exception.md) |
+| Default | Error | [`ApiErrorResponseException`](../../doc/models/api-error-response-exception.md) |
 

@@ -5,10 +5,10 @@ The following parameters are configurable for the API Client:
 
 | Parameter | Type | Description |
 |  --- | --- | --- |
-| environment | `Environment` | The API environment. <br> **Default: `Environment.PRODUCTION`** |
+| environment | [`Environment`](../README.md#environments) | The API environment. <br> **Default: `Environment.SANDBOX`** |
 | httpConfiguration | [`HttpConfiguration`](../doc/http-configuration.md) | Configurable http client options like timeout and retries. |
-| oAuth2SandboxCredentials | [`OAuth2SandboxCredentials`](auth/oauth-2-client-credentials-grant.md) | The Credentials Setter for OAuth 2 Client Credentials Grant |
-| oAuth2ProductionCredentials | [`OAuth2ProductionCredentials`](auth/oauth-2-client-credentials-grant-1.md) | The Credentials Setter for OAuth 2 Client Credentials Grant |
+| oAuth2Credentials | [`OAuth2Credentials`](auth/oauth-2-client-credentials-grant.md) | The Credentials Setter for OAuth 2 Client Credentials Grant |
+| apiKeyCredentials | [`ApiKeyCredentials`](auth/custom-header-signature.md) | The Credentials Setter for Custom Header Signature |
 
 The API client can be initialized as follows:
 
@@ -16,43 +16,37 @@ The API client can be initialized as follows:
 package main
 
 import (
-    "splititwebapiv3"
-    "splititwebapiv3/models"
+    "splititwebapiv4"
+    "splititwebapiv4/models"
 )
 
 func main() {
-    client := splititwebapiv3.NewClient(
-    splititwebapiv3.CreateConfiguration(
-            splititwebapiv3.WithHttpConfiguration(
-                splititwebapiv3.CreateHttpConfiguration(
-                    splititwebapiv3.WithTimeout(0),
+    client := splititwebapiv4.NewClient(
+    splititwebapiv4.CreateConfiguration(
+            splititwebapiv4.WithHttpConfiguration(
+                splititwebapiv4.CreateHttpConfiguration(
+                    splititwebapiv4.WithTimeout(0),
                 ),
             ),
-            splititwebapiv3.WithEnvironment(splititwebapiv3.PRODUCTION),
-            splititwebapiv3.WithOAuth2SandboxCredentials(
-                splititwebapiv3.NewOAuth2SandboxCredentials(
+            splititwebapiv4.WithEnvironment(splititwebapiv4.SANDBOX),
+            splititwebapiv4.WithOAuth2Credentials(
+                splititwebapiv4.NewOAuth2Credentials(
                     "OAuthClientId",
                     "OAuthClientSecret",
                 ).
-                WithOAuthScopes([]models.OAuthScopeOAuth2SandboxEnum{
-        models.OAuthScopeOAuth2SandboxEnum_APIV3,
+                WithOAuthScopes([]models.OAuthScopeOAuth2Enum{
+        models.OAuthScopeOAuth2Enum_APIV4,
     }),
             ),
-            splititwebapiv3.WithOAuth2ProductionCredentials(
-                splititwebapiv3.NewOAuth2ProductionCredentials(
-                    "OAuthClientId",
-                    "OAuthClientSecret",
-                ).
-                WithOAuthScopes([]models.OAuthScopeOAuth2ProductionEnum{
-        models.OAuthScopeOAuth2ProductionEnum_APIV3,
-    }),
+            splititwebapiv4.WithApiKeyCredentials(
+                splititwebapiv4.NewApiKeyCredentials("X-Splitit-Api-Key"),
             ),
         ),
     )
 }
 ```
 
-## splitit-web-api-v3 Client
+## splitit-web-api-v4 Client
 
 The gateway for the SDK. This class acts as a factory for the Controllers and also holds the configuration of the SDK.
 

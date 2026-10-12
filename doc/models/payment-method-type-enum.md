@@ -10,8 +10,19 @@
 | Name |
 |  --- |
 | `CARD` |
-| `SPLITITTOKEN` |
-| `BLUESNAPVAULTEDSHOPPERTOKEN` |
-| `SPLITITMOCKERV2TOKEN` |
-| `SPREEDLYTOKEN` |
+
+## Example
+
+```go
+package main
+
+import (
+    "splititwebapiv4/models"
+)
+
+func main() {
+    paymentMethodType := models.PaymentMethodTypeEnum_CARD
+
+}
+```
 

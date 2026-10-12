@@ -21,18 +21,18 @@ The retryConfiguration can be initialized as follows:
 package main
 
 import (
-    "splititwebapiv3"
+    "splititwebapiv4"
 )
 
 func main() {
-    retryConfiguration := splititwebapiv3.CreateRetryConfiguration(
-        splititwebapiv3.WithMaxRetryAttempts(0),
-        splititwebapiv3.WithRetryOnTimeout(true),
-        splititwebapiv3.WithRetryInterval(1),
-        splititwebapiv3.WithMaximumRetryWaitTime(0),
-        splititwebapiv3.WithBackoffFactor(2),
-        splititwebapiv3.WithHttpStatusCodesToRetry([]int64{408, 413, 429, 500, 502, 503, 504, 521, 522, 524}),
-        splititwebapiv3.WithHttpMethodsToRetry([]string{"GET", "PUT"}),
+    retryConfiguration := splititwebapiv4.CreateRetryConfiguration(
+        splititwebapiv4.WithMaxRetryAttempts(0),
+        splititwebapiv4.WithRetryOnTimeout(true),
+        splititwebapiv4.WithRetryInterval(1),
+        splititwebapiv4.WithMaximumRetryWaitTime(0),
+        splititwebapiv4.WithBackoffFactor(2),
+        splititwebapiv4.WithHttpStatusCodesToRetry([]int64{408, 413, 429, 500, 502, 503, 504, 521, 522, 524}),
+        splititwebapiv4.WithHttpMethodsToRetry([]string{"GET", "PUT"}),
     )
 }
 ```
