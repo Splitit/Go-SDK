@@ -25,14 +25,14 @@ You must provide credentials in the client as shown in the following code snippe
 package main
 
 import (
-    "splititwebapiv4"
+    "github.com/Splitit/go-sdk/v2"
 )
 
 func main() {
-    client := splititwebapiv4.NewClient(
-    splititwebapiv4.CreateConfiguration(
-            splititwebapiv4.WithApiKeyCredentials(
-                splititwebapiv4.NewApiKeyCredentials("X-Splitit-Api-Key"),
+    client := github.com/Splitit/go-sdk/v2.NewClient(
+    github.com/Splitit/go-sdk/v2.CreateConfiguration(
+            github.com/Splitit/go-sdk/v2.WithApiKeyCredentials(
+                github.com/Splitit/go-sdk/v2.NewApiKeyCredentials("X-Splitit-Api-Key"),
             ),
         ),
     )

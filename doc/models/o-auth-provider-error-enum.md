@@ -24,7 +24,7 @@ OAuth 2 Authorization error codes
 package main
 
 import (
-    "splititwebapiv4/models"
+    "github.com/Splitit/go-sdk/v2/models"
 )
 
 func main() {

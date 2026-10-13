@@ -16,21 +16,21 @@ The API client can be initialized as follows:
 package main
 
 import (
-    "splititwebapiv4"
-    "splititwebapiv4/models"
+    "github.com/Splitit/go-sdk/v2"
+    "github.com/Splitit/go-sdk/v2/models"
 )
 
 func main() {
-    client := splititwebapiv4.NewClient(
-    splititwebapiv4.CreateConfiguration(
-            splititwebapiv4.WithHttpConfiguration(
-                splititwebapiv4.CreateHttpConfiguration(
-                    splititwebapiv4.WithTimeout(0),
+    client := github.com/Splitit/go-sdk/v2.NewClient(
+    github.com/Splitit/go-sdk/v2.CreateConfiguration(
+            github.com/Splitit/go-sdk/v2.WithHttpConfiguration(
+                github.com/Splitit/go-sdk/v2.CreateHttpConfiguration(
+                    github.com/Splitit/go-sdk/v2.WithTimeout(0),
                 ),
             ),
-            splititwebapiv4.WithEnvironment(splititwebapiv4.SANDBOX),
-            splititwebapiv4.WithOAuth2Credentials(
-                splititwebapiv4.NewOAuth2Credentials(
+            github.com/Splitit/go-sdk/v2.WithEnvironment(github.com/Splitit/go-sdk/v2.SANDBOX),
+            github.com/Splitit/go-sdk/v2.WithOAuth2Credentials(
+                github.com/Splitit/go-sdk/v2.NewOAuth2Credentials(
                     "OAuthClientId",
                     "OAuthClientSecret",
                 ).
@@ -38,8 +38,8 @@ func main() {
         models.OAuthScopeOAuth2Enum_APIV4,
     }),
             ),
-            splititwebapiv4.WithApiKeyCredentials(
-                splititwebapiv4.NewApiKeyCredentials("X-Splitit-Api-Key"),
+            github.com/Splitit/go-sdk/v2.WithApiKeyCredentials(
+                github.com/Splitit/go-sdk/v2.NewApiKeyCredentials("X-Splitit-Api-Key"),
             ),
         ),
     )

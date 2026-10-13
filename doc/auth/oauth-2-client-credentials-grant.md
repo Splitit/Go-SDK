@@ -31,15 +31,15 @@ You must initialize the client with *OAuth 2.0 Client Credentials Grant* credent
 package main
 
 import (
-    "splititwebapiv4"
-    "splititwebapiv4/models"
+    "github.com/Splitit/go-sdk/v2"
+    "github.com/Splitit/go-sdk/v2/models"
 )
 
 func main() {
-    client := splititwebapiv4.NewClient(
-    splititwebapiv4.CreateConfiguration(
-            splititwebapiv4.WithOAuth2Credentials(
-                splititwebapiv4.NewOAuth2Credentials(
+    client := github.com/Splitit/go-sdk/v2.NewClient(
+    github.com/Splitit/go-sdk/v2.CreateConfiguration(
+            github.com/Splitit/go-sdk/v2.WithOAuth2Credentials(
+                github.com/Splitit/go-sdk/v2.NewOAuth2Credentials(
                     "OAuthClientId",
                     "OAuthClientSecret",
                 ).
@@ -74,15 +74,15 @@ Whenever the OAuth Token gets updated, the provided callback implementation will
 package main
 
 import (
-    "splititwebapiv4"
-    "splititwebapiv4/models"
+    "github.com/Splitit/go-sdk/v2"
+    "github.com/Splitit/go-sdk/v2/models"
 )
 
 func main() {
-    client := splititwebapiv4.NewClient(
-    splititwebapiv4.CreateConfiguration(
-            splititwebapiv4.WithOAuth2Credentials(
-                splititwebapiv4.NewOAuth2Credentials(
+    client := github.com/Splitit/go-sdk/v2.NewClient(
+    github.com/Splitit/go-sdk/v2.CreateConfiguration(
+            github.com/Splitit/go-sdk/v2.WithOAuth2Credentials(
+                github.com/Splitit/go-sdk/v2.NewOAuth2Credentials(
                     "OAuthClientId",
                     "OAuthClientSecret",
                 ).
@@ -109,15 +109,15 @@ package main
 
 import (
     "context"
-    "splititwebapiv4"
-    "splititwebapiv4/models"
+    "github.com/Splitit/go-sdk/v2"
+    "github.com/Splitit/go-sdk/v2/models"
 )
 
 func main() {
-    client := splititwebapiv4.NewClient(
-    splititwebapiv4.CreateConfiguration(
-            splititwebapiv4.WithOAuth2Credentials(
-                splititwebapiv4.NewOAuth2Credentials(
+    client := github.com/Splitit/go-sdk/v2.NewClient(
+    github.com/Splitit/go-sdk/v2.CreateConfiguration(
+            github.com/Splitit/go-sdk/v2.WithOAuth2Credentials(
+                github.com/Splitit/go-sdk/v2.NewOAuth2Credentials(
                     "OAuthClientId",
                     "OAuthClientSecret",
                 ).
