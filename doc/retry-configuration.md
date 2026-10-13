@@ -21,18 +21,18 @@ The retryConfiguration can be initialized as follows:
 package main
 
 import (
-    "splititwebapiv4"
+    "github.com/Splitit/go-sdk/v2"
 )
 
 func main() {
-    retryConfiguration := splititwebapiv4.CreateRetryConfiguration(
-        splititwebapiv4.WithMaxRetryAttempts(0),
-        splititwebapiv4.WithRetryOnTimeout(true),
-        splititwebapiv4.WithRetryInterval(1),
-        splititwebapiv4.WithMaximumRetryWaitTime(0),
-        splititwebapiv4.WithBackoffFactor(2),
-        splititwebapiv4.WithHttpStatusCodesToRetry([]int64{408, 413, 429, 500, 502, 503, 504, 521, 522, 524}),
-        splititwebapiv4.WithHttpMethodsToRetry([]string{"GET", "PUT"}),
+    retryConfiguration := github.com/Splitit/go-sdk/v2.CreateRetryConfiguration(
+        github.com/Splitit/go-sdk/v2.WithMaxRetryAttempts(0),
+        github.com/Splitit/go-sdk/v2.WithRetryOnTimeout(true),
+        github.com/Splitit/go-sdk/v2.WithRetryInterval(1),
+        github.com/Splitit/go-sdk/v2.WithMaximumRetryWaitTime(0),
+        github.com/Splitit/go-sdk/v2.WithBackoffFactor(2),
+        github.com/Splitit/go-sdk/v2.WithHttpStatusCodesToRetry([]int64{408, 413, 429, 500, 502, 503, 504, 521, 522, 524}),
+        github.com/Splitit/go-sdk/v2.WithHttpMethodsToRetry([]string{"GET", "PUT"}),
     )
 }
 ```

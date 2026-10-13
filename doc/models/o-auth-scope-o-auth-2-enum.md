@@ -19,7 +19,7 @@ OAuth 2 scopes supported by the API
 package main
 
 import (
-    "splititwebapiv4/models"
+    "github.com/Splitit/go-sdk/v2/models"
 )
 
 func main() {

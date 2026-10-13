@@ -17,16 +17,16 @@ Resolve all the SDK dependencies, using the `go get` command.
 
 ## Installation
 
-The following section explains how to use the splititwebapiv4 library in a new project.
+The following section explains how to use the github.com/Splitit/go-sdk/v2 library in a new project.
 
 ### 1. Add SDK as a Dependency to the Application
 
 - Add the following lines to your application's `go.mod` file:
 
 ```go
-replace splititwebapiv4 => ".\\splitit-web-api-v4" // local path to the SDK
+replace github.com/Splitit/go-sdk/v2 => ".\\splitit-web-api-v4" // local path to the SDK
 
-require splititwebapiv4 v0.0.0
+require github.com/Splitit/go-sdk/v2 v0.0.0
 ```
 
 - Resolve the dependencies in the updated `go.mod` file, using the `go get` command.
@@ -50,21 +50,21 @@ The API client can be initialized as follows:
 package main
 
 import (
-    "splititwebapiv4"
-    "splititwebapiv4/models"
+    "github.com/Splitit/go-sdk/v2"
+    "github.com/Splitit/go-sdk/v2/models"
 )
 
 func main() {
-    client := splititwebapiv4.NewClient(
-    splititwebapiv4.CreateConfiguration(
-            splititwebapiv4.WithHttpConfiguration(
-                splititwebapiv4.CreateHttpConfiguration(
-                    splititwebapiv4.WithTimeout(0),
+    client := github.com/Splitit/go-sdk/v2.NewClient(
+    github.com/Splitit/go-sdk/v2.CreateConfiguration(
+            github.com/Splitit/go-sdk/v2.WithHttpConfiguration(
+                github.com/Splitit/go-sdk/v2.CreateHttpConfiguration(
+                    github.com/Splitit/go-sdk/v2.WithTimeout(0),
                 ),
             ),
-            splititwebapiv4.WithEnvironment(splititwebapiv4.SANDBOX),
-            splititwebapiv4.WithOAuth2Credentials(
-                splititwebapiv4.NewOAuth2Credentials(
+            github.com/Splitit/go-sdk/v2.WithEnvironment(github.com/Splitit/go-sdk/v2.SANDBOX),
+            github.com/Splitit/go-sdk/v2.WithOAuth2Credentials(
+                github.com/Splitit/go-sdk/v2.NewOAuth2Credentials(
                     "OAuthClientId",
                     "OAuthClientSecret",
                 ).
@@ -72,8 +72,8 @@ func main() {
         models.OAuthScopeOAuth2Enum_APIV4,
     }),
             ),
-            splititwebapiv4.WithApiKeyCredentials(
-                splititwebapiv4.NewApiKeyCredentials("X-Splitit-Api-Key"),
+            github.com/Splitit/go-sdk/v2.WithApiKeyCredentials(
+                github.com/Splitit/go-sdk/v2.NewApiKeyCredentials("X-Splitit-Api-Key"),
             ),
         ),
     )
